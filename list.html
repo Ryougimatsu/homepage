@@ -1,0 +1,634 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>RYMのホムページ</title>
+    <!-- 引入字体图标 -->
+    <link rel="stylesheet" href="./font/iconfont.css" />
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        min-height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background-color: var(--body-color);
+        transition: all 0.3s ease;
+      }
+
+      /* 设置全局变量 */
+      :root {
+        --body-color: #e4e9f7;
+        --shell-color: #fff;
+        --primary-color: #695cfe;
+        --primary-color-light: #f6f5ff;
+        --toggle-color: #ddd;
+        --text-color: #707070;
+      }
+
+      /* 深色主题变量 */
+      .dark {
+        --body-color: #202224;
+        --shell-color: #171717;
+        --primary-color: #3a3b3c;
+        --primary-color-light: #3a3b3c;
+        --toggle-color: #fff;
+        --text-color: #ccc;
+      }
+
+      .shell {
+        position: fixed;
+        top: 0;
+        left: 0;
+        height: 100%;
+        width: 250px;
+        padding: 10px 14px;
+        background: var(--shell-color);
+        transition: all 0.3s ease;
+        z-index: 100;
+        border-right: 1px solid var(--primary-color);
+      }
+
+      .shell.close {
+        width: 80px;
+      }
+
+      .shell.close .name {
+        display: none;
+      }
+
+      .shell li {
+        height: 50px;
+        list-style: none;
+        display: flex;
+        align-items: center;
+        margin-top: 10px;
+      }
+
+      .image,
+      .icon {
+        min-width: 60px;
+        border-radius: 6px;
+      }
+
+      .icon {
+        min-width: 60px;
+        border-radius: 6px;
+        height: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font: 300 23px "";
+      }
+
+      .text,
+      .icon {
+        color: var(--text-color);
+        transition: all 0.3s ease;
+      }
+
+      .text {
+        font: 500 17px;
+        white-space: nowrap;
+        opacity: 1;
+      }
+
+      .shell.close .text {
+        opacity: 0;
+      }
+
+      header {
+        position: relative;
+      }
+
+      .image-text {
+        display: flex;
+        align-items: center;
+        cursor: pointer;
+      }
+
+      .logo-text {
+        display: flex;
+        flex-direction: column;
+      }
+
+      .name {
+        margin-top: 2px;
+        font: 600 18px "";
+      }
+
+      .software {
+        font-size: 20px;
+        margin-top: -2px;
+        display: block;
+      }
+
+      .image {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .image img {
+        width: 45px;
+        border-radius: 6px;
+      }
+
+      .toggle {
+        position: absolute;
+        top: 50%;
+        right: -25px;
+        transform: translateY(-50%) rotate(180deg);
+        height: 25px;
+        width: 25px;
+        background-color: var(--primary-color);
+        color: var(--shell-color);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 15px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+      }
+
+      .toggle {
+        color: #ccc;
+      }
+
+      .shell.close .toggle {
+        transform: translateY(-50%) rotate(0deg);
+      }
+
+      .menu {
+        margin-top: 40px;
+      }
+
+      li.search-box {
+        border-radius: 6px;
+        background-color: var(--primary-color-light);
+        cursor: pointer;
+        transition: all 0.3s ease;
+      }
+
+      li.search-box input {
+        height: 100%;
+        width: 100%;
+        outline: none;
+        border: none;
+        background-color: var(--primary-color-light);
+        color: var(--text-color);
+        border-radius: 6px;
+        font-size: 17px;
+        font-weight: 500;
+        transition: all 0.3s ease;
+      }
+
+      .shell li a {
+        list-style: none;
+        height: 100%;
+        background-color: transparent;
+        display: flex;
+        align-items: center;
+        height: 100%;
+        width: 100%;
+        border-radius: 6px;
+        text-decoration: none;
+        transition: all 0.3s ease;
+      }
+
+      .shell li a:hover {
+        background-color: var(--primary-color);
+      }
+
+      .shell li a:hover .icon,
+      .shell li a:hover .text {
+        color: var(--shell-color);
+      }
+
+      .menu-bar {
+        height: calc(100% - 55px);
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        overflow-y: scroll;
+      }
+
+      .menu-bar::-webkit-scrollbar {
+        display: none;
+      }
+
+      .menu-bar .mode {
+        border-radius: 6px;
+        background-color: var(--primary-color-light);
+        position: relative;
+        padding: 0 10px;
+        height: 50px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+      }
+
+      .mode .sun-moon {
+        height: 50px;
+        width: 60px;
+        display: flex;
+        align-items: center;
+      }
+
+      .mode .sun-moon i {
+        position: absolute;
+      }
+
+      .mode .sun-moon i.sun {
+        opacity: 0;
+      }
+
+      .toggle-switch {
+        position: relative;
+        height: 22px;
+        width: 40px;
+        border-radius: 25px;
+        background-color: var(--toggle-color);
+        transition: all 0.3s ease;
+      }
+
+      .toggle-switch::before {
+        content: "";
+        position: absolute;
+        height: 15px;
+        width: 15px;
+        border-radius: 50%;
+        top: 50%;
+        left: 5px;
+        transform: translateY(-50%);
+        background-color: var(--shell-color);
+        transition: all 0.3s ease;
+      }
+
+      .dark .shell li a:hover .icon,
+      .dark .shell li a:hover .text {
+        color: #ccc;
+      }
+
+      .dark .mode .sun-moon i.sun {
+        opacity: 1;
+      }
+
+      .dark .mode .sun-moon i.moon {
+        opacity: 0;
+      }
+
+      .dark .toggle-switch::before {
+        left: 20px;
+      }
+
+      .mode-text {
+        margin-right: 10px;
+        color: var(--text-color);
+        transition: all 0.3s ease;
+      }
+
+      .dark .mode-text {
+        color: #ccc;
+      }
+
+      .content {
+        padding-left: 250px;
+        transition: all 0.3s ease;
+      }
+
+      .about-me,
+      .hobby,
+      .bgtu {
+        display: none;
+        padding: 20px;
+        background-color: var(--shell-color);
+        border-radius: 8px;
+        margin: 20px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        opacity: 0;
+        transition: opacity 0.5s ease;
+      }
+
+      .about-me.show,
+      .hobby.show,
+      .bgtu.show {
+        display: block;
+        opacity: 1;
+      }
+
+      .carousel {
+        position: relative;
+        width: 1600px; /* 原宽度的两倍 */
+        height: 900px; /* 原高度的两倍 */
+        max-width: 100vw; /* 使轮播图宽度不超过视口宽度 */
+        max-height: 100vh; /* 使轮播图高度不超过视口高度 */
+        overflow: hidden;
+        border-radius: 8px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      }
+
+      .carousel img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover; /* 保持图片比例并填充容器 */
+        display: none;
+        transition: opacity 0.5s ease;
+      }
+
+      .carousel img.active {
+        display: block;
+        opacity: 1;
+      }
+    </style>
+    <style>
+      /* Existing CSS... */
+
+      .shell.close .mode-text {
+        display: none;
+      }
+
+      .mode {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 0 10px;
+        height: 50px;
+        background-color: var(--primary-color-light);
+        border-radius: 6px;
+      }
+
+      .shell.close .mode {
+        justify-content: center;
+      }
+
+      /* 新的样式规则 */
+      .review-carousel {
+        position: relative;
+        width: 100%;
+        overflow: hidden;
+      }
+
+      .review-box {
+        display: none; /* 初始状态下隐藏所有文本框 */
+        width: 100%;
+        transition: transform 0.5s ease;
+        text-align: center; /* 居中文本 */
+      }
+
+      .review-box.active {
+        display: block; /* 当前激活的文本框显示 */
+      }
+
+      .carousel-btn {
+        margin-top: 10px;
+        padding: 5px 10px;
+        cursor: pointer;
+      }
+
+      /* CSS for Project Carousel */
+.project-carousel {
+  position: relative;
+  width: 100%;
+  height: auto;
+  overflow: hidden;
+  display: flex;
+}
+
+.project-text {
+  width: 100%;
+  height: auto;
+  padding: 20px;
+  box-sizing: border-box;
+  display: none;
+  flex-shrink: 0;
+  transition: opacity 0.5s ease;
+  background-color: var(--primary-color-light);
+  color: var(--text-color);
+  border-radius: 6px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.project-text.active {
+  display: block;
+}
+
+    </style>
+  </head>
+  <body>
+    <nav class="shell">
+      <header>
+        <div class="image-text">
+          <span class="image">
+            <img src="Makima.jpg" alt="logo" />
+          </span>
+          <span class="logo-text">
+            <span class="name">RYM</span>
+          </span>
+        </div>
+        <div class="toggle">☰</div>
+      </header>
+      <div class="menu-bar">
+        <ul class="menu">
+          <li class="nav-link">
+            <a href="#" id="aboutMeLink">
+              <i class="iconfont icon-faxian icon"></i>
+              <span class="text">About Me</span>
+            </a>
+          </li>
+          <li class="nav-link">
+            <a href="#" id="hobbyLink">
+              <i class="iconfont icon-biaoqing icon"></i>
+              <span class="text">My Game Review</span>
+            </a>
+          </li>
+          <li class="nav-link">
+            <a href="#" id="bgtuLink">
+              <i class="iconfont icon-biaoqian icon"></i>
+              <span class="text">My Projects</span>
+            </a>
+          </li>
+        </ul>
+        <div class="mode">
+          <span class="mode-text">Night Mode</span>
+          <div class="toggle-switch">
+            <span class="switch"></span>
+          </div>
+        </div>
+      </div>
+    </nav>
+    <div class="content">
+      <!-- 图片轮播 -->
+      <div id="carousel" class="carousel">
+        <img src="001.JPG" alt="Image 1" class="active" />
+        <img src="002.jpg" alt="Image 2" />
+        <img src="003.JPG" alt="Image 3" />
+        <img src="004.JPG" alt="Image 4" />
+        <img src="005.JPG" alt="Image 5" />
+      </div>
+
+      <!-- 自我介绍内容 -->
+      <div id="aboutMeContent" class="about-me">
+        <h2>关于RYM</h2>
+        <p>这里是RYM的个人网站!目前在日本语学校就读，来年预定去专门学习继续学习关于游戏开发的技术。平常的个人兴趣是看小说、玩游戏、学习一些新的技术，还有时不时的摄影，目前在学习关于游戏开发的技术。欢迎大家来到我的个人主页，同时也很高兴认识你，主页的照片基本是我自己的摄影作品。</p>
+        <br>
+        <p>Here is RYM's personal website! I am currently studying at a Japanese language school and plan to continue studying game development technology next year at a specialized school. My personal interests include reading novels, playing games, learning new technologies, and occasionally photography. I am currently focusing on learning game development techniques. Welcome to my personal homepage, and I'm happy to meet you. Most of the photos on this site are my own photography works.</p>
+        <br>
+        <p>こちらはRYMの個人サイトです！現在、日本語学校に通っていて、来年はゲーム開発の技術を専門学校でさらに学ぶ予定です。普段の趣味は小説を読むこと、ゲームをすること、新しい技術を学ぶこと、そして時々写真を撮ることです。現在、ゲーム開発技術の勉強に取り組んでいます。私の個人ホームページへようこそ、お会いできて嬉しいです。サイトに掲載されている写真は基本的に私自身が撮影したものです。こちらはRYMの個人サイトです！現在、日本語学校に通っていて、来年はゲーム開発の技術を専門学校でさらに学ぶ予定です。普段の趣味は小説を読むこと、ゲームをすること、新しい技術を学ぶこと、そして時々写真を撮ることです。現在、ゲーム開発技術の勉強に取り組んでいます。私の個人ホームページへようこそ、お会いできて嬉しいです。サイトに掲載されている写真は基本的に私自身が撮影したものです。</p>
+      </div>
+
+      <div id="hobbyContent" class="hobby">
+        <h2>游戏评测</h2>
+        <div class="review-carousel">
+          <!-- 文本框1 -->
+          <div class="review-box active">
+            <p>黑神话悟空的优点很多例如不错的战斗系统，出色的过场结算动画，图鉴故事的趣闻，优秀的美术设计等等。缺点也很明显莫名其妙的空气墙，锁身体打点却在左右脚的，秒读指令弹反的某些boss，基本等于没做的引导设计，光影的突然白突然暗拉满造成的不适感等等。总体来说本身7分美术音乐+2文化价值+1 10分作品当然要是吃不到点就是个7分可玩佳作。顺带一提不想全成就是这个概率掉落和概率采集真该死啊！！！ 希望下次能够总结经验做出更好的作品！</p>
+            <br>
+            <p>"Black Myth: Wukong" has many strengths, such as a solid combat system, excellent cutscene animations, interesting lore in the bestiary, and outstanding art design. However, it also has some notable drawbacks, like inexplicable invisible walls, hit detection on the character's body that registers on the feet, some bosses with instant counterattack mechanics, virtually non-existent guidance design, and the discomfort caused by sudden changes in lighting from overly bright to dark. Overall, the game itself scores a 7 for its art and music, with an additional 2 points for its cultural value, making it a 10-point experience. However, if the cultural aspect doesn't resonate with you, it's essentially a solid 7 out of 10. By the way, the randomness of drop rates and gathering rates for full achievements is truly frustrating! Hopefully, they can learn from this and create an even better game next time!</p>
+            <br>
+            <p>「Black Myth: Wukong」には多くの長所があります。例えば、しっかりした戦闘システム、優れたカットシーンアニメーション、図鑑のストーリーの面白さ、そして優れた美術デザインなどです。しかし、いくつかの顕著な欠点もあります。例えば、意味不明な透明な壁、キャラクターの体のヒット検出が足の位置で行われること、一部のボスでの即死カウンター攻撃、ほぼ存在しないガイド設計、突然の明暗の変化による不快感などです。全体的に見て、アートと音楽に対しては7点、文化的価値に2点を追加し、10点満点の作品となります。ただし、文化的な要素が合わない場合は、実質的には7点の良作です。ちなみに、完全達成のためのドロップ率と採取率のランダム性は本当に苛立たしいです！次回は経験を活かしてさらに良い作品を作ってくれることを願っています！</p>
+          </div>
+          <!-- 新的文本框2 -->
+          <div class="review-box">
+            <p>评测 2 内容</p>
+          </div>
+          <!-- 可以继续添加更多的文本框 -->
+          <div class="review-box">
+            <p>评测 3 内容</p>
+          </div>
+        </div>
+        <!-- 添加左右轮播按钮 -->
+        <button id="prevReview" class="carousel-btn">Last</button>
+        <button id="nextReview" class="carousel-btn">Next</button>
+      </div>
+
+     <!-- My Projects Content -->
+<div id="bgtuContent" class="bgtu">
+  <h2>我的项目</h2>
+  <div class="project-carousel">
+    <div class="project-text active">项目 1</div>
+    <div class="project-text">项目 2</div>
+    <div class="project-text">项目 3</div>
+  </div>
+</div>
+
+
+    <!-- JavaScript for toggle and dark mode -->
+    <script>
+      const body = document.querySelector("body");
+      const shell = document.querySelector(".shell");
+      const toggle = document.querySelector(".toggle");
+      const modeSwitch = document.querySelector(".toggle-switch");
+      const modeText = document.querySelector(".mode-text");
+
+      toggle.addEventListener("click", () => {
+        shell.classList.toggle("close");
+      });
+
+      modeSwitch.addEventListener("click", () => {
+        body.classList.toggle("dark");
+      });
+
+      // JavaScript for navigation links
+      const aboutMeLink = document.getElementById("aboutMeLink");
+      const aboutMeContent = document.getElementById("aboutMeContent");
+      const hobbyLink = document.getElementById("hobbyLink");
+      const hobbyContent = document.getElementById("hobbyContent");
+      const bgtuLink = document.getElementById("bgtuLink");
+      const bgtuContent = document.getElementById("bgtuContent");
+      const carousel = document.getElementById("carousel");
+
+      aboutMeLink.addEventListener("click", (e) => {
+        e.preventDefault();
+        carousel.style.display = "none";
+        aboutMeContent.classList.add("show");
+        hobbyContent.classList.remove("show");
+        bgtuContent.classList.remove("show");
+      });
+
+      hobbyLink.addEventListener("click", (e) => {
+        e.preventDefault();
+        carousel.style.display = "none";
+        aboutMeContent.classList.remove("show");
+        hobbyContent.classList.add("show");
+        bgtuContent.classList.remove("show");
+      });
+
+      bgtuLink.addEventListener("click", (e) => {
+        e.preventDefault();
+        carousel.style.display = "none";
+        aboutMeContent.classList.remove("show");
+        hobbyContent.classList.remove("show");
+        bgtuContent.classList.add("show");
+      });
+
+      // JavaScript for RYM link to return to carousel
+      const nameLink = document.querySelector(".name");
+
+      nameLink.addEventListener("click", () => {
+        carousel.style.display = "block";
+        aboutMeContent.classList.remove("show");
+        hobbyContent.classList.remove("show");
+        bgtuContent.classList.remove("show");
+      });
+
+      // JavaScript for carousel
+      const images = document.querySelectorAll("#carousel img");
+      let currentIndex = 0;
+
+      function showImage(index) {
+        images.forEach((img, i) => {
+          img.classList.toggle("active", i === index);
+        });
+      }
+
+      function nextImage() {
+        currentIndex = (currentIndex + 1) % images.length;
+        showImage(currentIndex);
+      }
+
+      setInterval(nextImage, 3000);
+
+      const reviewBoxes = document.querySelectorAll(".review-box");
+      let currentReviewIndex = 0;
+
+      document.getElementById("prevReview").addEventListener("click", () => {
+        reviewBoxes[currentReviewIndex].classList.remove("active");
+        currentReviewIndex =
+          (currentReviewIndex - 1 + reviewBoxes.length) % reviewBoxes.length;
+        reviewBoxes[currentReviewIndex].classList.add("active");
+      });
+
+      document.getElementById("nextReview").addEventListener("click", () => {
+        reviewBoxes[currentReviewIndex].classList.remove("active");
+        currentReviewIndex = (currentReviewIndex + 1) % reviewBoxes.length;
+        reviewBoxes[currentReviewIndex].classList.add("active");
+      });
+      // JavaScript for Project Carousel
+const projectTexts = document.querySelectorAll("#bgtuContent .project-text");
+let currentProjectIndex = 0;
+
+function showProject(index) {
+  projectTexts.forEach((text, i) => {
+    text.classList.toggle("active", i === index);
+  });
+}
+
+function nextProject() {
+  currentProjectIndex = (currentProjectIndex + 1) % projectTexts.length;
+  showProject(currentProjectIndex);
+}
+
+// Set interval for project text box rotation
+setInterval(nextProject, 3000);
+
+    </script>
+  </body>
+</html>
